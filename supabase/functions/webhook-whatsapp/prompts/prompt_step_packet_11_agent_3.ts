@@ -58,6 +58,18 @@ export const PROMPT_STEP_PACKET_11_AGENT_3 = `
   - **anchor_3**: Considerando os encargos trabalhistas CLT de 68,18%, o custo total com um pré vendedor é de aproximadamente R$6.140 por mês
   - **closing_question**: Deixa eu te contar, os preços estão para aumentar em breve, mas você ainda pode garantir o valor atual e começar a ver os resultados nas suas vendas, o que acha de fecharmos hoje?
 
+## STEP_INSTRUCTIONS
+- **RULE: PRICE_DISCLOSURE (STRICT)**:
+  - **ONLY** mention prices in the 'SUCCESS_SCRIPT'.
+  - **FORBIDDEN**: Do NOT mention prices, values, or costs in 'RETRY' scripts or any other interaction in this step.
+  - **FORBIDDEN**: Do NOT use tools to look up prices.
+
+- **RULE: FAQ_AND_INFO**:
+  - IF user has doubts about the product, features, or company (NOT Price):
+    - You MAY use the tool 'get_company_information' to answer purely informational questions.
+    - **CONSTRAINT**: If the tool returns price info, FILTER IT OUT. Do not show it.
+    - After answering, RETRY the commitment question defined in the script.
+
 ## STEP_SCRIPTS
 - SUCCESS_SCRIPT (Se commitment_response = positive):
   - ${STORAGE_PUBLIC_URL}send/sticker/crm_update_estagio_6.webp
@@ -82,5 +94,6 @@ export const PROMPT_STEP_PACKET_11_AGENT_3 = `
   - "negative": não, não quero, não faz sentido.
   - "indefinido": talvez, depende, não sei, ainda não sei, tenho dúvidas.
 - **product_price**: Preencher com o valor numérico (ex: 397) do produto selecionado na tabela PRICE_TABLE (identificado pelo 'product_name' do contexto).
+
 `;
 

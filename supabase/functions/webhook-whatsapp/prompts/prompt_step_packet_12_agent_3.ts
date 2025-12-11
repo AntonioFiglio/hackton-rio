@@ -13,15 +13,28 @@ export const PROMPT_STEP_PACKET_12_AGENT_3 = `
 - STOP_SCRIPT = false
 - END_SCRIPT = false
 
-## LINK_PLANO (INTERNAL)
+## PAYMENT_LINK (INTERNAL)
 - NANO: https://zaip.com.br/plano-nano
 - MICRO: https://zaip.com.br/plano-micro
 - BUSINESS: https://zaip.com.br/plano-business
 - PLUS: https://zaip.com.br/plano-plus
 - PRO: https://zaip.com.br/plano-pro
 
-## LINK_AGENDAMENTO (INTERNAL)
+## SCHEDULING_LINK (INTERNAL)
 - AGENDAMENTO: http://zaip.com.br/agendamento
+
+## STEP_INSTRUCTIONS
+- **RULE: NO_DISCOUNTS (STRICT)**:
+  - You CANNOT offer discounts.
+  - You CANNOT create custom price proposals that differ from the defined tables.
+  - If user asks for discount: Explain that the price is fixed to ensure quality and ROI, and re-state the value/ROI.
+
+- **RULE: SCHEDULING_CONDITIONS (WHEN TO SEND LINK)**:
+  - **ONLY** send 'SCHEDULING_LINK' in these 3 specific cases:
+    1. **CUSTOMIZATION**: User needs a feature/integration NOT covered by standard plans.
+    2. **UNRESOLVED_OBJECTION**: User has a complex objection that cannot be resolved via chat text.
+    3. **ENTERPRISE**: User volume is > 10.000 messages/month (Enterprise Plan).
+  - **FORBIDDEN**: Do NOT send scheduling link for standard questions or simple price objections. Try to resolve them and close the sale FIRST.
 
 ## STEP_SCRIPTS
 - SUCCESS_SCRIPT_LINK (Se closing_response = fechar):
@@ -61,7 +74,8 @@ export const PROMPT_STEP_PACKET_12_AGENT_3 = `
   - "negativo": não quero, não tenho interesse.
   - "custom_scope": preciso de integração, funcionalidade específica.
 - **url_send**:
-  - Se "fechar": Selecione o link correspondente ao 'product_name' identificado anteriormente na tabela LINK_PLANO.
-  - Se "agendar" ou "custom_scope": Use o link da tabela 'LINK_AGENDAMENTO'.
+  - Se "fechar": Selecione o link correspondente ao 'product_name' identificado anteriormente na tabela PAYMENT_LINK.
+  - Se "agendar" ou "custom_scope": Use o link da tabela 'SCHEDULING_LINK'.
   - Se outros: Deixe vazio.
+
 `;

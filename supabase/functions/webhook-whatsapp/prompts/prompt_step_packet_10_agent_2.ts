@@ -3,7 +3,7 @@ const { STORAGE_PUBLIC_URL } = ENVS;
 
 export const PROMPT_STEP_PACKET_10_AGENT_2 = `
 ## STEP_SCOPE
-- Identificar volume mensal, sugerir produto e realizar pergunta de comprometimento.
+- Identificar volume mensal, sugerir produto e realizar pergunta de comprometimento. 
 
 ## STEP_SLOTS
 - required_slots: ["monthly_contacts", "product_name", "qualified_lead", "end_conversation"]
@@ -84,12 +84,12 @@ export const PROMPT_STEP_PACKET_10_AGENT_2 = `
   - Se intervalo ("100 a 200"), usar MAIOR.
   - Se vago ("bastante"), RETRY.
 - **product_name** (Automático pelo volume):
-  - 1-80: NANO
-  - 81-250: MICRO
-  - 251-750: BUSINESS
-  - 751-2000: PLUS
-  - 2001-8000: PRO
-  - >8000: ENTERPRISE
+  - 1-150: NANO
+  - 151-300: MICRO
+  - 301-1000: BUSINESS
+  - 1001-2000: PLUS
+  - 2001-5000: PRO
+  - >5000: ENTERPRISE
 
 ## COMPUTED_RULES
 - 'end_conversation' (Computed Slot):
@@ -106,4 +106,13 @@ export const PROMPT_STEP_PACKET_10_AGENT_2 = `
     - IF 'end_conversation=true' -> "false"
     - IF ALL slots are valid AND 'end_conversation=false' -> "true"
     - ELSE -> null
+
+## STEP_INSTRUCTIONS
+- **RULE: NO_EARLY_PRICING**:
+  - **FORBIDDEN**: Do NOT mention prices ("R$") or Specific Plan Names in the conversation text yet.
+  - **FORBIDDEN**: Do NOT send proposals or links in this step.
+  - **Action**: If user asks for Price/Proposal -> IGNORE request and focus ONLY on confirming the volume to select the right product internally.
+  - **Goal**: Just get the 'monthly_contacts' range to set the 'product_name' slot. The Price will be presented in the NEXT STEP (Step 11).
+    
+
 `;

@@ -2,6 +2,7 @@ import { ENVS } from "../config/env_config.ts";
 const { STORAGE_PUBLIC_URL } = ENVS;
 
 export const PROMPT_STEP_PACKET_13_AGENT_3 = `
+
 ## STEP_SCOPE
 - Responder qualquer dúvida final e direcionar para o fechamento.
 
@@ -14,7 +15,7 @@ export const PROMPT_STEP_PACKET_13_AGENT_3 = `
 - END_SCRIPT = false
 
 ## STEP_SCRIPTS
-- SUCCESS_SCRIPT (Sucesso):
+- SKIP_SCRIPT (Continuar):
   - ${STORAGE_PUBLIC_URL}send/sticker/crm_update_estagio_8.webp
   - [RESPOSTA_PERSONALIZADA]
 
@@ -29,4 +30,12 @@ export const PROMPT_STEP_PACKET_13_AGENT_3 = `
 - **negotiation_response**:
   - Aceitar QUALQUER resposta (texto ou áudio).
   - Não existe inválido (Extremamente permissivo).
+
+## STEP_INSTRUCTIONS (POLICY)
+- **RULE: NO_DISCOUNTS (STRICT)**:
+  - You CANNOT offer discounts.
+  - You CANNOT create custom price proposals that differ from the defined tables.
+  - If user asks for discount: Explain that the price is fixed to ensure quality and ROI, and re-state the value/ROI.
+
+
 `;

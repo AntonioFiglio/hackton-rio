@@ -12,7 +12,7 @@ export const AgentConfig = {
 
   // MCP
   enable_mcp: true,
-  mcp_require_approval: "always",  // Defines whether the tool requires approval. Use 'never' only if it is secure (e.g., token validated) or in a development environment.
+  mcp_require_approval: "never",  // Defines whether the tool requires approval. Use 'never' only if it is secure (e.g., token validated) or in a development environment.
   mcp_allowed_tools: [
     "get_company_informations"
   ],

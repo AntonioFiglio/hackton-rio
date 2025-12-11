@@ -152,6 +152,7 @@ export async function executeAiFlow(
                 summary.contact_phone,
                 "STATUS: OpenAI Assistant API error"
             );
+            logStep("ai_send_error_message", "success", { message: "STATUS: OpenAI Assistant API error" });
         } catch (e) {
             errors.push({ step: "ai_send_error_message", error: `Error sending error message to user: ${(e as any).message || e}` });
         }

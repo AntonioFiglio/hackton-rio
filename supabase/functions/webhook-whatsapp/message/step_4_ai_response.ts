@@ -321,7 +321,14 @@ export async function executeAiFlow(
         // Check: We MUST accept "indefinido" as a filled value.
         // If we reject it (&& val !== "indefinido"), the system thinks the slot is missing and STAYS on the current step.
         // This causes the Infinite Loop when skipping.
-        const isSlotFilled = (val: any) => val !== null && val !== undefined && val !== "";
+        const isSlotFilled = (val: any) => {
+            if (val === null || val === undefined || val === "") return false;
+            if (typeof val === "string") {
+                const lower = val.trim().toLowerCase();
+                if (lower === "null" || lower === "undefined") return false;
+            }
+            return true;
+        };
         const missingSlots = required_slots.filter(slot => !isSlotFilled(effectiveState[slot]));
         const hasMissingSlots = missingSlots.length > 0;
 

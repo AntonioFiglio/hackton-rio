@@ -338,7 +338,13 @@ export async function executeAiFlow(
             nextStep = currentStep + 1;
             logStep("flow_control", "success", { decision: "next", reason: "All required slots filled" });
         } else if (required_slots.length === 0) {
-            logStep("flow_control", "success", { decision: "stay", reason: "No required slots defined or empty" });
+            // SAFEGUARD: If required_slots is empty, it might be a parsing error OR a step without slots.
+            // For Steps 1-3, we KNOW there are required slots. If empty, it's a bug.
+            if (currentStep <= 4) { // Steps 1-4 ALWAYS have required slots. 
+                logStep("flow_control", "error", { decision: "stay", reason: "CRITICAL: Required slots parsed as EMPTY. Likely regex failure.", step_prompt_preview: processData.process_prompt.substring(0, 200) });
+            } else {
+                logStep("flow_control", "success", { decision: "stay", reason: "No required slots defined or empty" });
+            }
         } else {
             logStep("flow_control", "success", { decision: "stay", reason: "Missing required slots", missing: missingSlots });
         }
@@ -434,8 +440,10 @@ export async function executeAiFlow(
                 .filter(line => line.length > 0);
         };
 
-        const requiredMatch = markdown.match(/required_slots:\s*([^\n]+|[\s\S]*?)(?=\n\s*#|\n\n|$)/);
-        const optionalMatch = markdown.match(/optional_slots:\s*([^\n]+|[\s\S]*?)(?=\n\s*#|\n\n|$)/);
+        // Improved Regex to handle CRLF (\r\n) and standard LF (\n)
+        // Matches "required_slots:" followed by anything until end of line or before next # header, consuming newlines
+        const requiredMatch = markdown.match(/required_slots:\s*([^\n\r]+|[\s\S]*?)(?=\r?\n\s*#|\r?\n\r?\n|$)/);
+        const optionalMatch = markdown.match(/optional_slots:\s*([^\n\r]+|[\s\S]*?)(?=\r?\n\s*#|\r?\n\r?\n|$)/);
 
         return {
             required_slots: requiredMatch ? parseList(requiredMatch[1]) : [],

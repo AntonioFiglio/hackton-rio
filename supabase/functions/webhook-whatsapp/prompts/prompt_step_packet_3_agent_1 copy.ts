@@ -12,15 +12,12 @@ export const PROMPT_STEP_PACKET_3_AGENT_1 = `
 
 ## STEP_SCRIPTS
 - RETRY_SCRIPT:
-  - Não entendi. Digite apenas o número de dias (1 a 5).
+  - Escolhe um número de dias entre 1 e 5 pra eu montar a caixa certa.
+  - Preciso saber se é pra 1, 2, 3, 4 ou 5 dias.
 
 - SUCCESS_SCRIPT:
-  - Beleza! Escolha o tipo de cesta que deseja:
-  - 1 - Proteinas
-  - 2 - Carbo
-  - 3 - Hortifruti
-  - 4 - Frutas
-  - 5 - Grãos
+  - Beleza! Agora me diz uma coisa rapidinho
+  - Você quer comprar próximo da sua localização?
 
 ## EXTRACTION_RULES
 - **days_count**:

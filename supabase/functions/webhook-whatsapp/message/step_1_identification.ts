@@ -105,7 +105,7 @@ export async function identifyContext(
         company_url_terms: CompanyInfo.company_url_terms,
         company_url_privacy: CompanyInfo.company_url_privacy,
         step_process: "1 - Atendimento Iniciado",
-        process_prompt: getProcessPrompt(currentStep) || "",
+        process_prompt: "", // Force empty to ensure Step 4 fetches fresh prompt based on current_step
         state_process: "",
         contact_step_process: "1 - Contato Ativo",
         ai_gender: "neutro",

@@ -95,7 +95,13 @@ export async function processMessage(
         dbContent = msg;
         aiContent = msg;
     } else if (messageType === "location") {
-        const msg = "O usuário enviou uma localização e você não pode ver por conta da plataforma que utiliza para realizar o atendimento";
+        const loc = messageData?.location || {};
+        const lat = loc.latitude;
+        const long = loc.longitude;
+        const name = loc.name || "";
+        const addr = loc.address || "";
+
+        const msg = `[SISTEMA] Localização enviada pelo usuário: Latitude ${lat}, Longitude ${long}, Nome: ${name}, Endereço: ${addr}`;
         dbContent = msg;
         aiContent = msg;
     } else {

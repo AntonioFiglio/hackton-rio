@@ -15,12 +15,12 @@ export const PROMPT_STEP_PACKET_3_AGENT_1 = `
   - Não entendi. Digite apenas o número de dias (1 a 5).
 
 - SUCCESS_SCRIPT:
-  - Beleza! Escolha o tipo de cesta que deseja:
-  - 1 - Proteinas
-  - 2 - Carbo
-  - 3 - Hortifruti
-  - 4 - Frutas
-  - 5 - Grãos
+  - Escolha o tipo de cesta que deseja:
+  1. 🥩 Cesta Proteína Total (1kg)
+  2. 🍚 Cesta Sustança (Corboidratos) (1.5kg)
+  3. 🥦 Cesta Frescor da Horta (2kg)
+  4. 🍎 Cesta Frutas da Estação (1.8kg)
+  5. 🌾 Cesta Grãos Essenciais (1.2kg)
 
 ## EXTRACTION_RULES
 - **days_count**:

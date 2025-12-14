@@ -10,12 +10,22 @@ export const PROMPT_STEP_PACKET_4_AGENT_1 = `
 - STOP_SCRIPT = false
 - END_SCRIPT = false
 
+## STEP_INSTRUCTIONS
+- **DETALHES_CESTAS**:
+  - Se o usuário tiver dúvidas, explique os itens usando este resumo:
+  1. **Proteína Total**: Carnes variadas (frango, boi) e ovos.
+  2. **Sustança**: Carboidratos densos como batata, mandioca e inhame.
+  3. **Frescor da Horta**: Mix variado de legumes e verduras da estação.
+  4. **Frutas da Estação**: Seleção de frutas doces e cítricas.
+  5. **Grãos Essenciais**: Arroz, feijão, lentilha e grão de bico.
+
 ## STEP_SCRIPTS
 - RETRY_SCRIPT:
-  - Opção inválida. Digite apenas o número da cesta (1 a 5).
+  - Não entendi. Digite o número (1-5) ou pergunte sobre os itens se tiver dúvida.
 
 - SUCCESS_SCRIPT:
-  - Beleza! Agora me diz.. Você quer comprar próximo da sua localização?
+  - Beleza! Agora me diz... 
+  - Você quer comprar próximo da sua localização?
 
 ## EXTRACTION_RULES
 - **basket_type**:

@@ -20,10 +20,9 @@
 ---
 
 ## 2) Demo (links)
-- 🎥 Vídeo (até 2 min): <link>
+- 🎥 Vídeo (até 2 min): [Visitar Demo](https://drive.google.com/drive/folders/13OlF6RC1jbGNaACyoYT5VmaFx7y2Yx9j?usp=sharing)
+
 - 🖥️ Slides (até 12): [Slides]](https://www.canva.com/design/DAG7bS3Loh4/IRmLk5fVHDQjtaFiLNwuRw/view?utm_content=DAG7bS3Loh4&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hfed1630e25)
-
-
 
 - 🔗 Diagrama (Miro):
 

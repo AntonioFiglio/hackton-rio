@@ -1,28 +1,35 @@
 # XEPA — Hackathon Devs de Impacto RJ 2025
 
+> **Nota:** utilizamos o open source [`zaip_ai_opensource`](https://github.com/davidalpa/zaip_ai_opensource) para integrar com a API oficial do WhatsApp. Essa base foi compartilhada com todos os times pelo grupo oficial do hackathon.
+>
 > **Tema:** Segurança Alimentar no Brasil orientada por dados e tecnologia
+>
 > **Time:** XEPA
 > **Integrantes:**
-> - Antonio Filho
-> - Pedro Morais
-> - David Alpa
-> - Lucy Moza
+> Antonio Filho,  David Alpa, Lucy Moza ,Pedro Morais.
+>
 
 ---
 
-## 1) Resumo (em 5 linhas)
+## 1) O QUE SOMOS!
+
 **Problema:** Famílias de baixa renda enfrentam insegurança alimentar enquanto mercados locais descartam alimentos próprios para consumo.
+
 **Causa estrutural:** Falta de coordenação local, ausência de personalização alimentar por família e uso ineficiente de dados e logística.
+
 **Solução:** XEPA, uma IA no WhatsApp que monta caixas alimentares personalizadas para famílias usando alimentos próximos do descarte de mercados próximos.
+
 **IA:** A IA analisa perfil familiar + geolocalização + oferta local para recomendar o box alimentar mais adequado.
+
 **Impacto esperado:** Redução de desperdício (kg de alimentos resgatados) e aumento do acesso alimentar com economia média por família.
 
 ---
 
 ## 2) Demo (links)
+
 - 🎥 Vídeo (até 2 min): [Visitar Demo](https://drive.google.com/drive/folders/13OlF6RC1jbGNaACyoYT5VmaFx7y2Yx9j?usp=sharing)
 
-- 🖥️ Slides (até 12): [Slides]](https://www.canva.com/design/DAG7bS3Loh4/IRmLk5fVHDQjtaFiLNwuRw/view?utm_content=DAG7bS3Loh4&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hfed1630e25)
+- 🖥️ Slides (até 12): [Slides](https://www.canva.com/design/DAG7bS3Loh4/IRmLk5fVHDQjtaFiLNwuRw/view?utm_content=DAG7bS3Loh4&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hfed1630e25)
 
 - 🔗 Diagrama (Miro):
 
@@ -31,6 +38,7 @@
 ---
 
 ## 3) Problema estrutural e público-alvo
+
 - **Quem é afetado:**
   - Famílias de baixa renda (especialmente mães solo, famílias com crianças e idosos)
   - Mercados locais (perdas financeiras por descarte)
@@ -189,15 +197,8 @@ supabase functions serve webhook-whatsapp --env-file ../.env --no-verify-jwt --d
 10) Créditos e conformidade (anti-cheating)
 
 - Código desenvolvido durante o hackathon.
-
-- Open source utilizado:
-
-- zaip_ai_opensource — https://github.com/davidalpa/zaip_ai_opensource
-
-  - Utilizado para integração com a API do WhatsApp.
-Disponibilizado para todos os times no grupo oficial do hackathon.
--Dados públicos:
--IBGE / PNAD — uso contextual.
+- Open source utilizado: [`zaip_ai_opensource`](https://github.com/davidalpa/zaip_ai_opensource) para integração com a API oficial do WhatsApp (mesmo código disponibilizado a todos os times no grupo oficial).
+- Dados públicos: IBGE / PNAD — uso contextual.
 
 13) Licença
 

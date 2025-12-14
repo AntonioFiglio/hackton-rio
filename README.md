@@ -1,351 +1,200 @@
-# AI Agents for WhatsApp Sales Funnel (Zaip Open Source)
+# XEPA — Hackathon Devs de Impacto RJ 2025
 
-A production-grade serverless backend to build **AI-powered WhatsApp sales funnels**, running on:
-
-- 📱 Meta WhatsApp Cloud API (real-time events & messaging)
-- 🗄️ Supabase (Database • Storage • Edge Functions • Deno Runtime)
-- 🧠 OpenAI API Responses (GPT-5 Mini / GPT-4o Mini, low cost, low latency)
-- 🧩 MCP + RAG (Model Context Protocol + Supabase Vector with pgvector)
-
-This repo exposes the main Edge Function **`zaip_ai_opensource`**, responsible for processing every WhatsApp message and orchestrating:
-
-> **Contact → Buffering Messages → Conversation → Funnel Stage → Agent → AI Response → WhatsApp Reply**
-
-Use it as a **ready-to-customize template** to launch your own WhatsApp AI agent (sales, support, pre-sales, onboarding, etc.) without rebuilding all the infrastructure from scratch.
+> **Tema:** Segurança Alimentar no Brasil orientada por dados e tecnologia
+> **Time:** XEPA
+> **Integrantes:**
+> - Antonio Filho
+> - Pedro Morais
+> - David Alpa
+> - Lucy Moza
 
 ---
 
-## 🔥 Why This Project Stands Out
-
-Most chatbot templates:
-- Push giant static prompts to the model  
-- Let the AI handle 100% of the logic  
-- Burn tokens, hallucinate, and repeat messages  
-
-This project does the opposite:
-- 🧠 **True Context Engineering**  
-- 🧱 **Funnel logic and state machine OUTSIDE the model**  
-- 💸 **Optimized for small, cheap models (GPT-5 Mini / GPT-4o Mini)**  
-
-By sending only the **minimum context needed for each specific message**, you get:
-- Drastically reduced hallucination  
-- Much lower latency  
-- Much lower cost  
-- Predictable, scalable behavior  
+## 1) Resumo (em 5 linhas)
+**Problema:** Famílias de baixa renda enfrentam insegurança alimentar enquanto mercados locais descartam alimentos próprios para consumo.
+**Causa estrutural:** Falta de coordenação local, ausência de personalização alimentar por família e uso ineficiente de dados e logística.
+**Solução:** XEPA, uma IA no WhatsApp que monta caixas alimentares personalizadas para famílias usando alimentos próximos do descarte de mercados próximos.
+**IA:** A IA analisa perfil familiar + geolocalização + oferta local para recomendar o box alimentar mais adequado.
+**Impacto esperado:** Redução de desperdício (kg de alimentos resgatados) e aumento do acesso alimentar com economia média por família.
 
 ---
 
-## 🧠 Context Engineering & Dynamic Prompt Orchestration
-
-For **every incoming message**, the orchestrator performs:
-
-### 1. Funnel Stage Detection (`step_process`)
-Examples: `"New Lead"`, `"Active Contact"`, `"Scheduling"`, `"After-Sales"`.
-
-### 2. Dynamic Agent Selection
-Loads the correct persona based on the funnel stage.
-
-- Switch seamlessly between agents  
-  (e.g., `"Sales Rep"` → `"Support Scheduler"` → `"Payment Closer"`)
-
-### 3. Step Packet Injection
-Loads the **`step_packet`** containing:
-
-- Step-specific rules  
-- Scripts (ENTRY, NEXT, RETRY…)  
-- Required slot definitions  
-- Validation rules  
-
-Selected based on `current_step`.
-
-### 4. Slot Extraction
-The AI extracts variables such as:
-
-- Name  
-- Email  
-- Interest  
-- Budget  
-- Preferred time  
-- Anything defined by the step  
-
-Slots are saved to the database.
-
-### 5. State Update
-If step goals are met:
-
-- `current_step` advances  
-- `state_process` (funnel stage) updates automatically  
-
-### 6. MCP + RAG Integration
-The AI can query a vector database **only when needed**, using MCP tools.
-
-- Fetches relevant chunks  
-- Keeps AI context extremely lightweight
-
-**Result:**  
-You can run high-quality conversations using **GPT-5 Mini** with:
-
-```json
-reasoning: { "effort": "minimal" },
-text: { "verbosity": "low" }
-```
-
-Achieving better accuracy than large models using generic prompts.
+## 2) Demo (links)
+- 🎥 Vídeo (até 2 min): <link>
+- 🖥️ Slides (até 12): <link>
+- 🔗 Protótipo (WhatsApp flow / Figma): <link>
 
 ---
 
-## 🚀 Processing Pipeline (5 Main Steps)
+## 3) Problema estrutural e público-alvo
+- **Quem é afetado:**
+  - Famílias de baixa renda (especialmente mães solo, famílias com crianças e idosos)
+  - Mercados locais (perdas financeiras por descarte)
 
-The function uses an **instant 200 OK response** strategy to avoid WhatsApp timeout.
-Heavy logic runs asynchronously using `EdgeRuntime.waitUntil`.
+- **Onde/escopo:**
+  - Cidade do Rio de Janeiro (piloto urbano, escalável nacionalmente)
 
-### 0. Orchestrator (`message_controller.ts`)
-
-Coordinates all 5 steps, manages global state, and centralizes error handling.
-
----
-
-### 1. Context Identification (`step_1_identification.ts`)
-
-Extracts:
-
-* Sender phone number
-* Receiver phone number (Phone ID)
-
-Builds the **initial Flow Context**:
-
-* Company configuration
-* Channel configuration
-* Agent configuration
+- **Diagnóstico sistêmico:**
+  - Alimentos próximos do vencimento são descartados por falta de canal adequado.
+  - Famílias compram comida genérica, cara e pouco nutritiva por falta de orientação.
+  - Soluções existentes não consideram geolocalização nem perfil familiar.
 
 ---
 
-### 2. Session Management (`step_2_session.ts`)
-
-Manages contact + conversation objects:
-
-* Creates or updates `zaip_contacts`
-* Creates or fetches `zaip_conversations`
-* Loads:
-
-  * `step_process`
-  * `state_process`
-
-**7-Day Rule:**
-If the last interaction > 7 days → start a new conversation (new ID).
-
-Also manages **OpenAI Thread IDs** for conversation history.
+## 4) O que construímos (funcionalidades)
+- [x] Chatbot no WhatsApp (WhatsApp-first, acessível)
+- [x] Onboarding com perfil da família (tamanho, crianças, idosos, restrições)
+- [x] Uso de geolocalização (bairro/CEP aproximado)
+- [x] Motor de recomendação de caixas alimentares (ex: Box Proteína)
+- [x] Seleção de alimentos próximos do descarte em mercados locais
+- [ ] Loop de feedback para aprendizado da IA
 
 ---
 
-### 3. Message Processing (`step_3_message_type.ts`)
+## 5) Como a solução funciona (arquitetura)
+**Fluxo:**
+1. Ingestão de dados:
+- Mensagens WhatsApp do usuário
+- Perfil familiar
+- Geolocalização (bairro/CEP)
+- Catálogo de alimentos dos mercados parceiros
 
-Detects the type of message:
+2. Processamento / feature engineering:
+- Classificação do perfil familiar
+- Priorização nutricional (proteína, infantil, básico, emergencial)
+- Filtro por proximidade geográfica
 
-* **Debounce / double-send** prevention
-* **Text** → direct
-* **Audio/Image** → transcribed/decoded by AI
-* **Privacy:**
+3. IA:
+- Recomendação de box alimentar personalizada
+- Ajuste baseado em orçamento e feedback
 
-  * Raw media saved to Supabase Storage
-  * Only the transcription enters the AI context
-
----
-
-### 4. Artificial Intelligence (`step_4_ai_response.ts`)
-
-The core logic engine:
-
-* Builds dynamic prompt instructions based on current funnel stage
-* Uses MCP tools for RAG (vector DB search) when needed
-* Generates final response using configured model (GPT-4o, GPT-5 Mini, etc.)
-
-Dynamic model configuration:
-* **GPT-5**
-  * Minimal reasoning
-  * Low verbosity
-
-* **Other models**
-  * Temperature-based
-  * No reasoning/verbosity fields
+4. Saída:
+- Sugestão de caixa via WhatsApp
+- Confirmação e feedback do usuário
 
 ---
 
-### 5. WhatsApp Response Sending (`step_5_send_whatsapp_message.ts`)
+## 6) Uso de IA (explícito e justificável)
+**Tarefa de IA:** Recomendação e decisão assistida ( LLM OpenAI).
 
-* Splits long messages into multiple bubbles
-* Adds a **typing indicator** with random delay
-* Sends via WhatsApp Graph API
-* Marks conversation as **read**
+**Por que precisa de IA:**
+Regras fixas não conseguem lidar com a variabilidade de:
+- Composição familiar
+- Orçamento
+- Oferta local dinâmica
+- Preferências e feedback contínuo
 
----
+**Modelo(s):**
+- LLM compatível com OpenAI (para NLP e decisão assistida)
+- Regras heurísticas para validações nutricionais mínimas
 
-## 🛡️ Error Handling & Logging
+**Entrada:**
+- Texto do WhatsApp
+- Perfil familiar
+- Localização aproximada
+- Lista de itens disponíveis
 
-### 1. Centralized Execution Log
+**Saída:**
+- Tipo de box
+- Lista de alimentos
+- Valor estimado
 
-Every step logs into a single `executionLog` object.
-In the `finally` block of `index.ts`, the entire log prints as:
+**Validação:**
+- Taxa de aceite do box
+- Feedback qualitativo do usuário
 
-```
-LOG GERAL: { ...big JSON... }
-```
-
-**Pessimistic strategy:**
-
-* `logType` starts as `"ERROR"`
-* Only becomes `"SUCCESS"` if the flow ends intentionally
-
----
-
-### 2. Database Audit Tables
-
-* `log_results` → final result + extracted slots + AI reasoning
-* `log_conversations_steps` → history of funnel & step transitions
-* `log_meta_whebhook` → raw Meta events
-* `log_openai_requests` → raw AI inputs/outputs
-* `log_mcp` → RAG/tool-call history
-
----
-
-### 3. Error Severity Levels
-
-**Critical Errors (flow stops):**
-
-* Invalid payload
-* Missing channel
-* Session creation failure
-* OpenAI API failure
-
-Response: 4xx / 5xx.
-
-**Non-Critical Errors (flow continues):**
-
-* Logging failure
-* Message insertion failure after send
-* Status webhook error
-
-Flow continues and the user receives the message normally.
+**Cuidados:**
+- Não armazenar dados sensíveis
+- Não substituir orientação médica/nutricional
+- Transparência da recomendação
 
 ---
 
-## 📂 Architecture & Microservices
+## 7) Dados (fontes e dicionário)
+**Fontes usadas:**
+- IBGE / PNAD — https://www.ibge.gov.br — contexto de insegurança alimentar.
+- Dados públicos de preços de alimentos — simulação.
+- Dados sintéticos de mercados locais — prototipagem.
 
-Inside `supabase/functions/` you get **two independent microservices**:
+**Dicionário (principais campos):**
+- `family_size`: número de pessoas
+- `has_children`: boolean
+- `has_elderly`: boolean
+- `has_pregnant`: boolean
+- `diet_restrictions`: array
+- `location_area`: bairro/CEP
+- `box_type`: proteína | infantil | básico | emergencial
+- `budget_range`: faixa de preço
 
-### 1. `webhook-whatsapp` — The Core Orchestrator
-
-* Receives WhatsApp webhook events
-* Manages funnel → agent → AI flow
-* Connects to Supabase DB, Storage, and OpenAI
-
-**Internal Structure:**
-
-```
-webhook-whatsapp/
-│ index.ts
-│ event_router.ts
-│
-├── message/
-│   ├── message_controller.ts
-│   ├── step_1_identification.ts
-│   ├── step_2_session.ts
-│   ├── step_3_message_type.ts
-│   ├── step_4_ai_response.ts
-│   └── step_5_send_whatsapp_message.ts
-│
-├── database_queries/
-├── config/
-├── prompts/
-├── facebook_events/
-└── types/
-```
+> **Privacidade:** não coletamos endereço exato, CPF, nome completo ou mensagens brutas.
+> Apenas dados mínimos, anonimizados e agregados.
 
 ---
 
-### 2. `mcp` — Tools & RAG Service
+## 8) Como rodar localmente
+### Pré-requisitos
+- Node.js 18+
+- Docker + Docker Compose (o Supabase usa containers)
+- Supabase CLI instalada e logada (`supabase start` vai subir DB/Auth/Storage)
+- `psql` disponível no PATH (para aplicar o schema)
+- Chaves válidas: WhatsApp Graph API, OpenAI, MCP (opcional)
 
-* Runs as an independent MCP server
-* Provides access to:
-  * Internal Knowledge Base
-  * Vector Database
-  * External tools
-* The main bot uses this service for RAG calls
-
----
-
-## 📡 Webhook Event Routing
-
-Handled by `event_router.ts`.
-
-### Conversational Events (messages)
-
-* Routed to the AI pipeline (Steps 1–5)
-
-### System Events (e.g., `account_update`)
-
-* Logged in `log_meta_whebhook`
-* Do **not** trigger AI logic
-
----
-
-## 🛠️ Quick Start
-
-### Requirements
-* Supabase project
-* OpenAI API key
-* Meta WhatsApp Cloud API key
-
-### Local Development
-
+### Passo a passo
+1) Clone e entre no projeto
 ```bash
-supabase login
-supabase functions serve --env-file .env.local
+git clone <repo>
+cd <repo>
 ```
 
-### Deployment
-
-#### Option 1 — GitHub Actions (Automatic)
-
-CI/CD workflow:
-`.github/workflows/deploy-edgefunctions.yml`
-
-* Push to `main` → automatic deployment
-
-#### Option 2 — Manual Deploy
-
+2) Copie as variáveis de ambiente e preencha
 ```bash
-supabase functions deploy
+cp .env.example .env
+```
+- Pegue `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` do `supabase start` ou `supabase status --output env`.
+- Preencha os tokens do WhatsApp, OpenAI e MCP.
+
+3) Suba a stack local do Supabase
+```bash
+supabase start
+```
+- Mantém DB/Auth/Storage rodando em `127.0.0.1:54322` (Postgres) e `http://127.0.0.1:54321/functions/v1`.
+
+4) Carregue o schema no Postgres local
+```bash
+psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -f database_schema/create_tables.sql
 ```
 
-Environment variables:
-* Deployment: `SUPABASE_ACCESS_TOKEN` (PAT)
-* Runtime: `SUPABASE_SERVICE_ROLE_KEY`
-* Required: `SUPABASE_PROJECT_ID`
+5) Rode a Edge Function do WhatsApp (local)
+```bash
+cd supabase
+supabase functions serve webhook-whatsapp --env-file ../.env --no-verify-jwt --debug
+```
+- Endpoint local exposto: `http://127.0.0.1:54321/functions/v1/webhook-whatsapp`.
+- Use ngrok/localtunnel para apontar o webhook do WhatsApp para esse endpoint.
 
----
+9) Roadmap pós-hackathon
 
-## 📚 Full Documentation
+- Piloto com mercados reais no RJ
 
-See `DEVELOPMENT.md` for:
+- Métricas automáticas de impacto social
 
-* Line-by-line explanations
-* Architecture diagrams
-* Business rules
-* How to customize agents, funnel, and prompts
+- Integração com CRAS / Prefeituras (B2G)
 
----
+- Recorrência inteligente de caixas
 
-## 💡 Who This Is For
+10) Créditos e conformidade (anti-cheating)
 
-Use this repo if you want to build:
+- Código desenvolvido durante o hackathon.
 
-* A **WhatsApp AI SaaS**
-* Smart pre-sales agents
-* Support/scheduling assistants
-* Sales funnels with structured data extraction
-* Multi-step conversational workflows
-* A production-ready WhatsApp AI backend
+- Open source utilizado:
 
-Clone it, plug in your prompts, configure your funnel and you’re ready to deploy a **WhatsApp AI Agent that actually works in production**.
+- zaip_ai_opensource — https://github.com/davidalpa/zaip_ai_opensource
 
+  - Utilizado para integração com a API do WhatsApp.
+Disponibilizado para todos os times no grupo oficial do hackathon.
+-Dados públicos:
+-IBGE / PNAD — uso contextual.
+
+13) Licença
+
+MIT
